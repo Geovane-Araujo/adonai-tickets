@@ -28,9 +28,10 @@ $sidebar-transition: $transition-duration opacity $transition-delay, $transition
 
 .wp-content {
   margin-top: 68px;
-  margin-left: 60px;
+  margin-left: 180px;
   height: 89vh;
   width: auto;
+  overflow: auto; 
   margin-right: 8px;
   box-shadow: black;
 }

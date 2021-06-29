@@ -20,6 +20,8 @@ Vue.config.productionTip = false
 Vue.component('datatable-adonai', DataTable)
 Vue.use(PrimeVue, { ripple: true })
 Vue.use(ToastService)
+/* Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts) */
 
 new Vue({
   router,

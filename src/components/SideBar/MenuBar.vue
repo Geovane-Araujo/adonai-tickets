@@ -7,10 +7,10 @@
           <div v-for="item in itens_menu" :key="item.nome">
             <div v-if="item.type === 1">
               <li class="sidebar-dropdown">
-                <router-link to="/" class="ab">
+                <a href="#" class="ab">
                   <i style="margin-right: 10px;" :class="item.icon"></i>
                   <span>{{ item.nome }}</span>
-                </router-link>
+                </a>
                 <div class="sidebar-submenu">
                   <ul>
                     <li style="list-style:none;" v-for="sub_item in item.sub" :key="sub_item.nome">

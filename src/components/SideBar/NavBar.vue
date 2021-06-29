@@ -2,9 +2,8 @@
   <div>
     <div data-component="navbar">
       <nav class="navbar p-0 fixed-top">
-      <a class="navbar-brand px-1" href="#"><img src="icons.svg" class="d-inline-block mt-1" alt="AgentFire Logo" height="40"></a>
+      <a class="navbar-brand px-1" href="#"><img src="./logo.png" class="d-inline-block mt-1" alt="AgentFire Logo" height="40"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#megamenu-dropdown" aria-controls="megamenu-dropdown" aria-expanded="false" aria-label="Toggle navigation">
-          Integrei
         </button>
         <div>
           <div class="right-links float-right mr-4">

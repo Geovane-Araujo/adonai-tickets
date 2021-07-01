@@ -86,24 +86,14 @@
     </div>
     <div style="margin-top: 10px" class="row">
       <div class="col-sm-4">
-        <Card style="width: 25rem; margin-rigth: 10px">
-          <template #title>
-              Por Atendente
-          </template>
-          <template #content>
-              <apexchart type="donut" :options="chartOptions" :series="series" ></apexchart>
-          </template>
-        </Card>
-      </div>
-      <div class="col-sm-4">
-        <Card style="width: 25rem;">
-          <template #title>
-              Por Atendente
-          </template>
-          <template #content>
-              <apexchart type="donut" :options="chartOptions" :series="series" ></apexchart>
-          </template>
-        </Card>
+        <div class="cardperson">
+          <div class="headerCard">
+            <h4>Atendentes</h4>
+          </div>
+          <div>
+            <apexchart type="donut" :options="chartOptions" :series="series" ></apexchart>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -111,7 +101,6 @@
 
 <script>
 import VueApexCharts from 'vue-apexcharts'
-import Card from 'primevue/card'
 // referencias
 // cores gradiente: https://gradients.cssgears.com/
 export default {
@@ -138,13 +127,30 @@ export default {
     }
   },
   components: {
-    apexchart: VueApexCharts,
-    Card
+    apexchart: VueApexCharts
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.cardperson{
+  h4{
+    margin-left: 10px;
+    margin-top: 5px;
+    color: #fff;
+  }
+  background-color: #1E365D;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 0px 1px 0px rgba($color: #000000, $alpha: 1.0);
+  .headerCard{
+    height: 40px;
+    box-shadow: 0px 0px 1px 0px rgba($color: #000000, $alpha: 1.0);
+    border-radius: 5px 0px 0px 0px;
+    background-color: #1E365D;
+  }
+}
+
 .tp{
   font-size: 0.8em;
 }

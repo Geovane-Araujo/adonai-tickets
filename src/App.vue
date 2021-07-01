@@ -8,6 +8,7 @@
 body{
   height: 100%;
   overflow: hidden;
+  background-color: #206187;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

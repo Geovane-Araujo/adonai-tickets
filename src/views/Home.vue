@@ -62,7 +62,7 @@ export default {
               {
                 nome: 'Clientes',
                 icon: 'far fa-chart-bar',
-                route: ''
+                route: '/clientes'
               },
               {
                 nome: 'Atendentes',

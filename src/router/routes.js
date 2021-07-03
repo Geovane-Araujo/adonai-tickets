@@ -2,6 +2,7 @@ import Home from '../views/Home.vue'
 import DashBoard from '../views/DashBoard.vue'
 import Atendimentos from '../views/Atendimentos.vue'
 import Login from '../security/Login.vue'
+import Clientes from '../views/Clientes.vue'
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
         path: '/atendimentos',
         name: 'Atendimentos',
         component: Atendimentos
+      },
+      {
+        path: '/clientes',
+        name: 'Clientes',
+        component: Clientes
       }
     ]
   },

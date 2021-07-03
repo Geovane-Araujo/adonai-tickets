@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
-    <Toast position="top-left"/>
+    <Toast position="bottom-left"/>
   </div>
 </template>
 <script>

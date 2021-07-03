@@ -6,6 +6,7 @@ import store from './store'
 import DataTable from './components/DataTable.vue'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
+import VueTheMask from 'vue-the-mask'
 import '@fortawesome/fontawesome-free/js/all.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
@@ -20,6 +21,7 @@ Vue.config.productionTip = false
 Vue.component('datatable-adonai', DataTable)
 Vue.use(PrimeVue, { ripple: true })
 Vue.use(ToastService)
+Vue.use(VueTheMask)
 /* Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts) */
 

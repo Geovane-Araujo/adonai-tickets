@@ -51,10 +51,15 @@ export default {
     login (form) {
       this.isLoading = true
       axios.post(http.url + 'login', form).then(res => {
-        console.log(res)
+        if (res.data.ret === 'success') {
+          sessionStorage.setItem('token', res.data.token)
+          this.$router.push({ name: 'DashBoard' })
+        } else {
+          this.$toast.add({ severity: 'error', summary: 'Falha', detail: res.data.motivo, life: 3000 })
+        }
         this.isLoading = false
       }).catch(err => {
-        console.log(err)
+        this.$toast.add({ severity: 'error', summary: 'Falha', detail: err, life: 3000 })
         this.isLoading = false
       })
     },

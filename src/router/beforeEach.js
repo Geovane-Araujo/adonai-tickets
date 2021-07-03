@@ -1,10 +1,10 @@
 export default async (to, from, next) => {
-  const token = localStorage.getItem('token')
-  if (to.name === 'DashBoard' && (token !== '' && token !== null)) {
-    next()
+  const token = sessionStorage.getItem('token')
+  if (to.name !== 'Login' && token === null) {
+    next({ name: 'Login' })
   } else if (to.name === 'Login') {
     next()
   } else {
-    next({ name: 'Login' })
+    next()
   }
 }

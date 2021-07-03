@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <loading :active="isLoading" :height="45" :width="128" background-color="#c9cdf0" color="#232b70" loader="spinner" :is-full-page="true"/>
     <div class="cardlogin">
       <div class="mb-3 img">
         <img src="../assets/img/avatar.png" alt="">
@@ -7,20 +8,20 @@
       <div class="mb-3">
         <label for="cnpjcpf" class="form-label" style="margin-bottom: 3px">CNPJ/CPF</label>
         <the-mask
-          type="text"
+          type="text" v-model="form.cnpj"
           the-mask :mask="['###.###.###-##', '##.###.###/####-##']"
           class="form-control" id="cnpjcpf"/>
       </div>
       <div class="mb-3">
         <label for="cnpjcpf" class="form-label" style="margin-bottom: 3px">Usuário</label>
-        <input type="text" class="form-control"  id="cnpjcpf">
+        <input type="text" v-model="form.login" class="form-control"  id="cnpjcpf">
       </div>
       <div class="mb-3">
         <label for="isenha" class="form-label" style="margin-bottom: 3px">Senha</label>
-        <input type="password" class="form-control" id="isenha">
+        <input type="password" v-model="form.senha" class="form-control" id="isenha">
       </div>
       <div class="mb-2">
-        <button type="button" class="btn btn-light w-100">Login</button>
+        <button type="button" @click="login(form)" class="btn btn-light w-100">Login</button>
       </div>
       <div class="mb-0">
         <button type="button" class="btn btn-dark w-100">Esqueci minha Senha</button>
@@ -30,8 +31,40 @@
 </template>
 
 <script>
-export default {
+import axios from 'axios'
+import http from '../router/http'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 
+export default {
+  data () {
+    return {
+      isLoading: false,
+      form: {
+        cnpj: '',
+        login: '',
+        senha: ''
+      }
+    }
+  },
+  methods: {
+    login (form) {
+      this.isLoading = true
+      axios.post(http.url + 'login', form).then(res => {
+        console.log(res)
+        this.isLoading = false
+      }).catch(err => {
+        console.log(err)
+        this.isLoading = false
+      })
+    },
+    to () {
+      // this.$toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 })
+    }
+  },
+  components: {
+    Loading
+  }
 }
 </script>
 

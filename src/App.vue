@@ -1,14 +1,22 @@
 <template>
   <div id="app">
     <router-view/>
+    <Toast position="top-left"/>
   </div>
 </template>
+<script>
+import Toast from 'primevue/toast'
+export default {
+  components: {
+    Toast
+  }
+}
+</script>
 
 <style lang="scss">
 body{
   height: 100%;
   overflow: hidden;
-  background-color: #206187;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

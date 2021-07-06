@@ -75,7 +75,7 @@ export default {
 
 <style lang="scss" scoped>
 .login{
-  background-color: brown;
+  background-image: url('../assets/img/paisagem.jpg');
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -87,7 +87,7 @@ export default {
 .cardlogin{
   padding: 10px;
   width: 400px;
-  background-color: antiquewhite;
+  background-color:#F7F7F7;
   border-radius: 10px;
 }
 .img{

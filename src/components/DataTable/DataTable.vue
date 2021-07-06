@@ -1,6 +1,5 @@
 <template>
   <div class="csa">
-    <loading :active="isLoading" :height="45" :width="128" background-color="#c9cdf0" color="#232b70" loader="spinner" :is-full-page="true"/>
     <div style="display: flex;">
       <DataTable :selection.sync="selectedProducts3" :autoLayout="true" :scrollable="true" :paginator="true" :rows="20" scrollHeight="60vh" :value="data" class="p-datatable-sm">
           <Column selectionMode="multiple" headerStyle="width: 3em"></Column>

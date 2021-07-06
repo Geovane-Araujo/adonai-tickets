@@ -23,6 +23,7 @@ Vue.component('datatable', DataTable)
 Vue.use(PrimeVue, { ripple: true })
 Vue.use(ToastService)
 Vue.use(VueTheMask)
+
 /* Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts) */
 

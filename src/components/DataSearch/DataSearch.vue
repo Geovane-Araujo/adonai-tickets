@@ -44,37 +44,25 @@ export default {
   data () {
     return {
       openloading: false,
+      openDatasearch: false,
       registros: [],
       resize: 40,
       params: '',
-      r: false,
-      l: false,
       pagina: 1,
       contexto: '',
       criterio: '',
       extraparams: '',
-      totalRows: 200,
-      expl: {
-        route: '',
-        pagina: 1,
-        criterios: ''
-      }
+      totalRows: 200
     }
   },
   methods: {
-    dataSearch (criterios, params, extraparams) {
+    dataSearch (explorer) {
       this.onResize()
       this.openloading = true
-      axios.post(http.url + 'aexplorer', criterios, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
+      this.openDatasearch = true
+      /* axios.post(http.url + 'explorer', explorer, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
         if (res.data.ret === 'success') {
           this.registros = res.data.obj
-          this.expl = criterios
-          this.pagina = criterios.pagina
-          this.params = params
-          this.extraparams = extraparams
-          this.openloading = false
-          this.totalRows = res.data.totalRows
-          this.validate(criterios.pagina, this.registros.length)
         } else {
           this.$toast.add({ severity: 'error', summary: 'Falha', detail: res.data.motivo, life: 3000 })
         }
@@ -82,7 +70,7 @@ export default {
         this.openDatasearch = true
       }).catch(err => {
         this.$toast.add({ severity: 'error', summary: 'Falha', detail: err, life: 3000 })
-      })
+      }) */
     },
     getexplorer (crit) {
       if (this.criterio === '') {
@@ -103,14 +91,6 @@ export default {
         })
       }
     },
-    validate (paging, length) {
-      if (paging === 1) {
-        this.r = true
-      }
-      if (length < 15) {
-        this.l = true
-      }
-    },
     onRoute () {
       if (this.expl.route === 'exp_municipio') {
         this.criterio = 'municipio.nome'
@@ -121,10 +101,6 @@ export default {
       this.expl.pagina = event.page
       this.dataSearch(this.expl, this.params, this.extraparams)
     },
-    /* onSelectRsgister (cabecalho) {
-      this.criterio = cabecalho
-      this.$toastr.success(cabecalho + ' selecionado', 'Sistema Diz:', util.toast)
-    }, */
     onRowSelect (event) {
       this.openDatasearch = false
       this.destroy(event.data, this.params, this.extraparams)
@@ -155,14 +131,6 @@ export default {
     },
     explorerflex: {
       type: Object
-    },
-    form: {
-      type: Object,
-      required: true
-    },
-    openDatasearch: {
-      type: Boolean,
-      default: false
     },
     newchurch: {
       type: String,

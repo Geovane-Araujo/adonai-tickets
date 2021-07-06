@@ -1,12 +1,12 @@
 <template>
   <div>
-    <Dialog class="p-dialog p-dialog-content p-dialog-title" header="Cadastro de Clientes" :visible.sync="show" :style="{width: resize + 'vw'}" :modal="true">
+    <Dialog class="p-dialog p-dialog-content p-dialog-title" header="Cadastro de Colaboradores" :visible.sync="show" :style="{width: resize + 'vw'}" :modal="true">
       <TabView class="hed">
           <TabPanel header="Principal">
             <div class="row" style=" height: 20vh;">
               <div class="col-sm-2">
                 <div class="p-d-flex p-jc-center">
-                  <img :src="form.foto" width="90" height="90" class="rounded-circle" alt="img">
+                  <img v-bind:src="form.foto" width="90" height="90" class="rounded-circle" alt="img">
                 </div>
                 <div class="p-d-flex p-jc-center">
                   <label for='selecao-arquivo' class="inputtype"><i class="pi pi-search" style="color: #0008ff;"></i></label>
@@ -16,10 +16,31 @@
               </div>
               <div class="col-sm-10">
                 <div class="row">
-                  <div class="col-sm-7">
+                  <div class="col-sm-12">
                     <div class="mb-3">
-                      <label for="1" class="form-label" style="margin-bottom: 3px">Nome</label>
-                      <input type="text" v-model="form.nome" class="form-control"  id="1">
+                      <label for="1f" class="form-label" style="margin-bottom: 3px">Nome</label>
+                      <input type="text"  :value="form.nome"  class="form-control"  id="1f">
+                    </div>
+                  </div>
+                  <div class="col-sm-5">
+                    <div class="mb-3">
+                      <label for="cnpjcpf" class="form-label" style="margin-bottom: 3px">CNPJ/CPF</label>
+                      <the-mask
+                        type="text" v-model="form.cnpjcpf"
+                        the-mask :mask="['###.###.###-##', '##.###.###/####-##']"
+                        class="form-control" id="cnpjcpf"/>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="mb-3">
+                      <label for="1f" class="form-label" style="margin-bottom: 3px">RG/IE</label>
+                      <input type="text" v-model="form.rgie" class="form-control"  id="1f">
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="mb-3">
+                      <label for="1f" class="form-label" style="margin-bottom: 3px">Nascimento/Criação</label>
+                      <input type="date" v-model="form.datanasciment" class="form-control"  id="1f">
                     </div>
                   </div>
                 </div>
@@ -27,6 +48,32 @@
             </div>
           </TabPanel>
           <TabPanel header="Endereços">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="mb-3">
+                  <label for="2f" class="form-label" style="margin-bottom: 3px">Cep</label>
+                  <div class="input-group">
+                    <input id="2f" type="text" class="form-control"  aria-label="Input group example" >
+                    <button type="button" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <input-datasearch :key="form.endereco.idcidade" :value="form.endereco.cidade" :headers="['id', 'cidade']" :title="cidade" route="exp_cidade"/>
+              </div>
+              <div class="col-sm-6">
+                <div class="mb-3">
+                  <label for="3f" class="form-label" style="margin-bottom: 3px">Endereço</label>
+                  <input type="text"  :value="form.endereco.endereco"  class="form-control"  id="3f">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="mb-3">
+                  <label for="1f" class="form-label" style="margin-bottom: 3px">Numero</label>
+                  <input type="text"  :value="form.endereco.endereco"  class="form-control"  id="1f">
+                </div>
+              </div>
+            </div>
           </TabPanel>
           <TabPanel header="Telefones/Emails">
           </TabPanel>
@@ -70,6 +117,7 @@ export default {
           numero: '',
           cep: '',
           idcidade: '',
+          cidade: '',
           idpessoa: ''
         },
         telefone: [

@@ -1,15 +1,15 @@
 <template>
   <div class="mb-3">
-    <label for="2f" class="form-label" style="margin-bottom: 3px">{{ name }}</label>
-    <div class="input-group">
-      <input id="2f" type="text" v-model="value" class="form-control"  aria-label="Input group example" >
-      <button type="button" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
+    <div>
+      <label for="dsff" class="form-label" style="margin-bottom: 3px">{{ name }}</label>
+      <div class="input-group">
+        <input id="dsff" type="text" v-model="model" class="form-control"  aria-label="Input group example" >
+        <button type="button" @click="datasearch()" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
+      </div>
     </div>
-    <datasearch :title="title"
-    :cabecalho="headers"
-    :form="form"
-    :destroy="destroy"
-    ref="expl"/>
+    <div>
+      <datasearch :title="title"  :cabecalho="headers" :destroy="destroy" ref="expl"/>
+    </div>
   </div>
 </template>
 
@@ -23,29 +23,32 @@ export default {
         paging: 1,
         orders: 'ORDER BY ID DESC',
         router: 'mnu_cliente'
-      }
+      },
+      model: '',
+      keyy: ''
     }
   },
   methods: {
     datasearch () {
       this.explorerflex.router = this.route
       this.explorerflex.orders = 'ORDER BY ID DESC'
-      // this.$refs.expl.dataSearch(this.explorerflex)
+      this.$refs.expl.dataSearch(this.explorerflex)
     },
-    destroy (value, key) {
-      this.value = value
-      this.key = key
+    destroy (values, ky) {
+      this.model = values
+      this.$emit('rsKey', ky)
+      this.$emit('rsValue', values)
     }
   },
   props: {
     route: {
       type: String
     },
-    value: {
+    values: {
       type: String
     },
-    key: {
-      type: Object
+    ky: {
+      type: Number
     },
     name: {
       type: String
@@ -55,7 +58,9 @@ export default {
     },
     title: {
       type: String
-    }
+    },
+    rsKey: Function,
+    rsValue: Function
   }
 }
 </script>

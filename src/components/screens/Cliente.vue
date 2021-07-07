@@ -33,14 +33,14 @@
                   </div>
                   <div class="col-sm-4">
                     <div class="mb-3">
-                      <label for="1f" class="form-label" style="margin-bottom: 3px">RG/IE</label>
-                      <input type="text" v-model="form.rgie" class="form-control"  id="1f">
+                      <label for="2f" class="form-label" style="margin-bottom: 3px">RG/IE</label>
+                      <input type="text" v-model="form.rgie" class="form-control"  id="2f">
                     </div>
                   </div>
                   <div class="col-sm-3">
                     <div class="mb-3">
-                      <label for="1f" class="form-label" style="margin-bottom: 3px">Nascimento/Criação</label>
-                      <input type="date" v-model="form.datanasciment" class="form-control"  id="1f">
+                      <label for="3f" class="form-label" style="margin-bottom: 3px">Nascimento/Criação</label>
+                      <input type="date" v-model="form.datanasciment" class="form-control"  id="3f">
                     </div>
                   </div>
                 </div>
@@ -51,26 +51,26 @@
             <div class="row">
               <div class="col-sm-3">
                 <div class="mb-3">
-                  <label for="2f" class="form-label" style="margin-bottom: 3px">Cep</label>
+                  <label for="4f" class="form-label" style="margin-bottom: 3px">Cep</label>
                   <div class="input-group">
-                    <input id="2f" type="text" class="form-control"  aria-label="Input group example" >
-                    <button type="button" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
+                    <input id="4f" type="text" class="form-control"  aria-label="Input group example" >
+                    <button @click="verifica()" type="button" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
                   </div>
                 </div>
               </div>
               <div class="col-sm-4">
-                <input-datasearch :key="form.endereco.idcidade" :value="form.endereco.cidade" :headers="['id', 'cidade']" :title="cidade" route="exp_cidade"/>
+                <input-datasearch :ky="form.endereco.idcidade" name="Cidade" :values="form.endereco.cidade" :headers="['id', 'nome', 'uf']" title="cidades" route="expl_cidades" @rsKey="form.endereco.idcidade = $event" @rsValue="form.endereco.cidade = $event"/>
               </div>
               <div class="col-sm-6">
                 <div class="mb-3">
-                  <label for="3f" class="form-label" style="margin-bottom: 3px">Endereço</label>
-                  <input type="text"  :value="form.endereco.endereco"  class="form-control"  id="3f">
+                  <label for="5f" class="form-label" style="margin-bottom: 3px">Endereço</label>
+                  <input type="text"  :value="form.endereco.endereco"  class="form-control"  id="5f">
                 </div>
               </div>
               <div class="col-sm-3">
                 <div class="mb-3">
-                  <label for="1f" class="form-label" style="margin-bottom: 3px">Numero</label>
-                  <input type="text"  :value="form.endereco.endereco"  class="form-control"  id="1f">
+                  <label for="6f" class="form-label" style="margin-bottom: 3px">Numero</label>
+                  <input type="text"  :value="form.endereco.endereco"  class="form-control"  id="6f">
                 </div>
               </div>
             </div>
@@ -135,7 +135,6 @@ export default {
   methods: {
     openModal () {
       this.resize = util.onResize(this.resize)
-      console.log(this.resize)
       this.show = true
     },
     getImg (e) {
@@ -145,6 +144,9 @@ export default {
       reader.onload = e => {
         this.form.foto = e.target.result
       }
+    },
+    verifica () {
+      console.log(this.form.endereco)
     }
   },
   components: {

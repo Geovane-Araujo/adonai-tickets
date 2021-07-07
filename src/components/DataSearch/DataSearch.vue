@@ -1,33 +1,20 @@
 <template>
-<transition>
-  <div class="datasearch">
-      <Dialog  :header="title" :visible.sync="openDatasearch" :style="{width: resize+'vw'}" :modal="true">
-        <b-form-input class="mr-sm-2" placeholder="Buscar" v-model="contexto"  @keyup="getexplorer(contexto)"></b-form-input>
-        <DataTable
-        class="p-datatable-sm"
-        scrollHeight="200px"
-        :scrollable="true"
-        style="font-size:14px;"
-        :value="registros"
-        :paginator="true"
-        :rows="15"
-        :selection.sync="select"
-        selectionMode="single"
-        dataKey="ID"
-        @row-select="onRowSelect"
-        paginatorTemplate=""
-        columnResizeMode="fit">
-          <Column headerStyle="width: 2rem" bodyStyle="height:5px;" v-for="itcabe in cabecalho" :field="itcabe" :header="itcabe" :key="itcabe.ID"></Column>
-          <template style="font-size:14px;" #paginatorLeft>
-            <Paginator @page="onPage($event)" class="p-paginator-success" :rows="15" :totalRecords="totalRows"></Paginator>
-          </template>
-      </DataTable>
+    <div>
+      <Dialog height="500px" :header="title" :visible.sync="openDatasearch" :style="{width: resize+'vw'}" :modal="true">
+        <div>
+          <div class="mb-3">
+            <label for="ds2f" class="form-label" style="margin-bottom: 3px">Buscar</label>
+            <input type="text"  v-model="contexto" @keyup="getexplorer(contexto)" class="form-control"  id="ds2f">
+          </div>
+          <DataTable selectionMode="single" @row-select="onRowSelect" :selection.sync="itens" :scrollable="true" :paginator="true" :rows="20" scrollHeight="200px" :value="data" class="p-datatable-sm">
+            <Column headerStyle="width: 2rem" bodyStyle="height:5px;" v-for="itcabe in cabecalho" :field="itcabe" :header="itcabe" :key="itcabe.ID"></Column>
+          </DataTable>
+        </div>
         <template #footer>
-          <Button label="Cancelar"  @click="openDatasearch=false" class="p-button-raised p-button-success p-button-text button"/>
+          <Button label="Cancelar" @click="openDatasearch=false" class="p-button-raised p-button-success p-button-text button"/>
         </template>
       </Dialog>
     </div>
-  </transition>
 </template>
 
 <script>
@@ -37,7 +24,6 @@ import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import Paginator from 'primevue/paginator'
 
 export default {
   name: 'datasearch',
@@ -45,14 +31,10 @@ export default {
     return {
       openloading: false,
       openDatasearch: false,
-      registros: [],
+      data: [],
+      itens: [],
       resize: 40,
-      params: '',
-      pagina: 1,
-      contexto: '',
-      criterio: '',
-      extraparams: '',
-      totalRows: 200
+      contexto: ''
     }
   },
   methods: {
@@ -60,9 +42,9 @@ export default {
       this.onResize()
       this.openloading = true
       this.openDatasearch = true
-      /* axios.post(http.url + 'explorer', explorer, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
+      axios.post(http.url + 'explorer', explorer, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
         if (res.data.ret === 'success') {
-          this.registros = res.data.obj
+          this.data = res.data.obj
         } else {
           this.$toast.add({ severity: 'error', summary: 'Falha', detail: res.data.motivo, life: 3000 })
         }
@@ -70,7 +52,7 @@ export default {
         this.openDatasearch = true
       }).catch(err => {
         this.$toast.add({ severity: 'error', summary: 'Falha', detail: err, life: 3000 })
-      }) */
+      })
     },
     getexplorer (crit) {
       if (this.criterio === '') {
@@ -91,25 +73,24 @@ export default {
         })
       }
     },
-    onRoute () {
-      if (this.expl.route === 'exp_municipio') {
-        this.criterio = 'municipio.nome'
-      }
-    },
     onPage (event) {
       event.page += 1
-      this.expl.pagina = event.page
-      this.dataSearch(this.expl, this.params, this.extraparams)
+      // this.expl.pagina = event.page
+      // this.dataSearch(this.expl)
     },
     onRowSelect (event) {
       this.openDatasearch = false
-      this.destroy(event.data, this.params, this.extraparams)
+      if (event.data.descricao !== undefined) {
+        this.destroy(event.data.descricao, event.data.id)
+      } else {
+        this.destroy(event.data.nome, event.data.id)
+      }
     },
     onResize () {
       if (window.innerWidth <= 767) {
         this.resize = 100
       } else {
-        this.resize = 40
+        this.resize = 70
       }
     }
   },
@@ -117,8 +98,7 @@ export default {
     Dialog,
     Button,
     DataTable,
-    Column,
-    Paginator
+    Column
   },
   props: {
     title: {
@@ -142,29 +122,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ss{
+  height: 100px;
+}
+.p-dialog{
+  height: 100vh;
+}
+.p-datatable-sm{
+  height: 50vh;
+  font-size: 11px;
+}
 .datasearch {
-  border-radius: 10px;
+  height: 100vh;
   box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.25);
   background-color: rgba($color: #ffffff, $alpha: 0.9);
   margin: 5px;
-  overflow:auto;
-}
-#overlay {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  z-index: 1000;
-  left: 0;
-  right: 0;
-  background: rgba($color: #000000, $alpha: 0.7);
-}
-#loading {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  z-index: 9999;
-  left: 0;
-  right: 0;
-  background: rgba($color: #000000, $alpha: 0.7);
 }
 </style>

@@ -71,6 +71,11 @@ export default {
         this.$toast.add({ severity: 'error', summary: 'Falha', detail: err, life: 3000 })
         this.isLoading = false
       })
+    },
+    onPage (event) {
+      event.page += 1
+      this.explorer.pagina = event.page
+      this.getexplorer(this.explorer)
     }
   },
   directives: {

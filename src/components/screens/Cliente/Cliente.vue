@@ -3,10 +3,10 @@
     <Dialog class="p-dialog p-dialog-content p-dialog-title" header="Cadastro de Colaboradores" :visible.sync="show" :style="{width: resize + 'vw'}" :modal="true">
       <TabView class="hed">
           <TabPanel header="Principal">
-            <div class="row" style=" height: 20vh;">
-              <div class="col-sm-2">
+            <div class="row">
+              <div class="col-sm-2" style="padding: 10px;">
                 <div class="p-d-flex p-jc-center">
-                  <img v-bind:src="form.foto" width="90" height="90" class="rounded-circle" alt="img">
+                  <Avatar :image="form.foto" size="xlarge" shape="circle"/>
                 </div>
                 <div class="p-d-flex p-jc-center">
                   <label for='selecao-arquivo' class="inputtype"><i class="pi pi-search" style="color: #0008ff;"></i></label>
@@ -45,21 +45,42 @@
                   </div>
                 </div>
               </div>
+              <div class="col-sm-3">
+                <div class="mb-3">
+                  <label for="res" class="form-label" style="margin-bottom: 3px">Telefone Residencial</label>
+                  <the-mask
+                    type="text" v-model="form.telefone[0].telefone"
+                    the-mask :mask="['(##)####-####']"
+                    class="form-control" id="res"/>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="mb-3">
+                  <label for="cel" class="form-label" style="margin-bottom: 3px">Telefone Celular</label>
+                  <the-mask
+                    type="text" v-model="form.telefone[1].telefone"
+                    the-mask :mask="['(##)####-####']"
+                    class="form-control" id="cel"/>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="mb-3">
+                  <label for="9f" class="form-label" style="margin-bottom: 3px">Email</label>
+                  <input type="text" v-model="form.email" class="form-control"  id="9f">
+                </div>
+              </div>
             </div>
           </TabPanel>
-          <TabPanel header="Endereços">
+          <TabPanel header="Endereço">
             <div class="row">
               <div class="col-sm-3">
                 <div class="mb-3">
                   <label for="4f" class="form-label" style="margin-bottom: 3px">Cep</label>
                   <div class="input-group">
-                    <input id="4f" type="text" class="form-control"  aria-label="Input group example" >
-                    <button @click="verifica()" type="button" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
+                    <input id="4f" type="text" v-model="form.endereco.cep" class="form-control"  aria-label="Input group example" >
+                    <button type="button" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
                   </div>
                 </div>
-              </div>
-              <div class="col-sm-4">
-                <input-datasearch :ky="form.endereco.idcidade" name="Cidade" :values="form.endereco.cidade" :headers="['id', 'nome', 'uf']" title="cidades" route="expl_cidades" @rsKey="form.endereco.idcidade = $event" @rsValue="form.endereco.cidade = $event"/>
               </div>
               <div class="col-sm-6">
                 <div class="mb-3">
@@ -70,12 +91,31 @@
               <div class="col-sm-3">
                 <div class="mb-3">
                   <label for="6f" class="form-label" style="margin-bottom: 3px">Numero</label>
-                  <input type="text"  :value="form.endereco.endereco"  class="form-control"  id="6f">
+                  <input type="text"  :value="form.endereco.numero"  class="form-control"  id="6f">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="mb-3">
+                  <label for="7f" class="form-label" style="margin-bottom: 3px">Bairro</label>
+                  <input type="text"  :value="form.endereco.bairro"  class="form-control"  id="7f">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="mb-3">
+                  <label for="8f" class="form-label" style="margin-bottom: 3px">Complemento</label>
+                  <input type="text"  :value="form.endereco.complemento"  class="form-control"  id="8f">
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="mb-3">
+                  <label for="10f" class="form-label" style="margin-bottom: 3px">Cidade</label>
+                  <div class="input-group">
+                    <input id="10f" type="text" :value="form.endereco.cidade" class="form-control"  aria-label="Input group example" >
+                    <button @click="openDatasearch(1)" type="button" class="btn btn-outline-secondary"><i class="pi pi-search" style="color: #0008ff;"></i></button>
+                  </div>
                 </div>
               </div>
             </div>
-          </TabPanel>
-          <TabPanel header="Telefones/Emails">
           </TabPanel>
       </TabView>
       <template #footer>
@@ -83,79 +123,11 @@
           <Button label="Cancelar" icon="pi pi-times" class="p-button-text p-button-danger" @click="show=false"/>
       </template>
     </Dialog>
+    <datasearch :title="ds.title" :cabecalho="ds.headers" :destroy="destroy" ref="expl"/>
   </div>
 </template>
 
-<script>
-import Dialog from 'primevue/dialog'
-import Button from 'primevue/button'
-import TabView from 'primevue/tabview'
-import TabPanel from 'primevue/tabpanel'
-import util from '../../util/Util'
-export default {
-  data () {
-    return {
-      resize: 60,
-      show: false,
-      form: {
-        add: true,
-        edit: false,
-        dele: false,
-        id: '',
-        nome: '',
-        foto: '',
-        cnpjcpf: '',
-        rgie: '',
-        endereco: {
-          add: true,
-          edit: false,
-          dele: false,
-          id: '',
-          endereco: '',
-          bairro: '',
-          complemento: '',
-          numero: '',
-          cep: '',
-          idcidade: '',
-          cidade: '',
-          idpessoa: ''
-        },
-        telefone: [
-          {
-            id: '',
-            telefone: '',
-            tipo: ''
-          }
-        ]
-      }
-    }
-  },
-  mounted () {
-  },
-  methods: {
-    openModal () {
-      this.resize = util.onResize(this.resize)
-      this.show = true
-    },
-    getImg (e) {
-      var file = e.target.files[0]
-      var reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = e => {
-        this.form.foto = e.target.result
-      }
-    },
-    verifica () {
-      console.log(this.form.endereco)
-    }
-  },
-  components: {
-    Dialog,
-    Button,
-    TabView,
-    TabPanel
-  }
-}
+<script src="./Cliente.js">
 </script>
 
 <style lang="scss" scoped>

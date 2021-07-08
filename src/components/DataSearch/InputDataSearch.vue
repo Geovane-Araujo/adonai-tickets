@@ -8,7 +8,7 @@
       </div>
     </div>
     <div>
-      <datasearch :title="title"  :cabecalho="headers" :destroy="destroy" ref="expl"/>
+      <datasearch :title="title" :cabecalho="headers" :destroy="destroy" ref="expl"/>
     </div>
   </div>
 </template>

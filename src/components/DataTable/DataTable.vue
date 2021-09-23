@@ -1,93 +1,172 @@
 <template>
-  <div class="csa">
-    <div style="display: flex;">
-      <DataTable :selection.sync="selectedProducts3" :autoLayout="true" :scrollable="true" :paginator="true" :rows="20" scrollHeight="60vh" :value="data" class="p-datatable-sm">
-          <Column selectionMode="multiple" headerStyle="width: 3em"></Column>
-          <Column :headerStyle="'width:' +item.width +'%' " v-for="item in headers" :key="item.name" :field="item.name" :header="item.header"></Column>
-          <Column headerStyle="width:14%">
-              <template #body="slotProps">
-                  <Button icon="pi pi-pencil" class="p-button-text" v-tooltip.top="'Editar'" @click="edit(slotProps)"/>
-                  <Button icon="pi pi-trash" class="p-button-text" v-tooltip.top="'Excluir'" @click="edit(slotProps)"/>
-              </template>
-          </Column>
-          <template #paginatorLeft>
-            <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-        </template>
-      </DataTable>
+  <div class="table">
+    <div>
+      <div class="btns" style="margin-bottom: 10px;">
+      <Button class="p-button-outlined p-button-info" style="margin-right: 5px;" label="Adicionar" @click="onGetById(-100)"/>
+      <Button class="p-button-outlined p-button-warning" style="margin-right: 5px;" label="Editar" @click="onGetById(onEditing())"/>
+      <Button class="p-button-outlined p-button-danger" style="margin-right: 5px;" label="Excluir" @click="onDeleted"/>
     </div>
+    <DataTable
+      :loading="loading" :selection="selecionado" selectionMode="multiple" scrollHeight="68vh" :scrollable="true" class="p-datatable-sm" :value="obj">
+      <Column :headerStyle="'width:'+col.length+'vw'" headerClass="altura" :bodyStyle="'width:'+col.length+'vw'" v-for="col of columns" :field="col.field" :header="col.header" :key="col.field"></Column>
+      <template #paginatorLeft>
+        <Button @click="onRefresh" type="button" icon="pi pi-refresh" style="margin-right: 10px"/>
+        <InputText @keyup.stop="onSearch(search)" type="text" v-model="search" style="width: 180px"/>
+      </template>
+    </DataTable>
+    </div>
+    <div class="pagging">
+      <Paginator :rows="20" @page="onPage($event)" :totalRecords="total">
+      <template #right="slotProps">
+        Mostrando: {{slotProps.state.page + 1}}
+        para: {{slotProps.state.first}}
+        de: {{slotProps.state.rows}}
+      </template>
+      <template #left>
+        <Button @click="onRefresh" type="button" icon="pi pi-refresh" style="margin-right: 10px"/>
+        <InputText @keyup.stop="onSearch(search)" type="text" v-model="search" style="width: 180px"/>
+      </template>
+    </Paginator>
+    </div>
+    <Dialog header="Confirmation" :visible="showDeleted" :style="{width: '350px'}" :modal="true">
+        <div class="confirmation-content">
+            <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
+            <span>Deseja realmente excluir este registro?</span>
+        </div>
+        <template #footer>
+            <Button label="Sim" icon="pi pi-check" @click="onConfirmationDeleted" class="p-button-text"/>
+            <Button label="Não" icon="pi pi-times" @click="showDeleted = false" class="p-button-text" autofocus />
+        </template>
+    </Dialog>
   </div>
 </template>
 
 <script>
-import Button from 'primevue/button'
+import http from '../../router/http'
+import axios from 'axios'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import Tooltip from 'primevue/tooltip'
-import axios from 'axios'
-import http from '../../router/http'
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
+import Button from 'primevue/button'
+import Paginator from 'primevue/paginator'
+import InputText from 'primevue/inputtext'
+import Dialog from 'primevue/dialog'
+
 export default {
+  name: 'table-ticket',
   data () {
     return {
-      isLoading: false,
-      data: [],
-      selectedProducts3: []
+      loading: false,
+      showDeleted: false,
+      obj: [],
+      itens: [],
+      selecionado: [],
+      total: 0,
+      search: '',
+      selectedFilter: '',
+      iddelete: 0,
+      combobox: [
+        {
+          name: '',
+          code: ''
+        }
+      ]
     }
-  },
-  components: {
-    Button,
-    DataTable,
-    Column
   },
   props: {
-    headers: {
-      type: Array,
-      require: true
+    title: {
+      type: String
     },
-    editMode: {
-      type: Boolean,
-      default: false
-    },
-    delMode: {
-      type: Boolean,
-      default: false
-    },
-    route: {
+    objectRoute: {
       type: Object
-    }
+    },
+    columns: {
+      type: Array
+    },
+    classname: {
+      type: String
+    },
+    onGetById: Function
+  },
+  components: {
+    DataTable,
+    Paginator,
+    Column,
+    Button,
+    Dialog,
+    InputText
   },
   methods: {
-    getexplorer (route) {
-      this.isLoading = true
-      axios.post(http.url + 'explorer', route, { headers: { Authorization: sessionStorage.getItem('token') } }).then(res => {
+    onSelect (items) {
+      this.itens = items
+    },
+    async getAll (objectRoute) {
+      this.loading = true
+      sessionStorage.setItem('objRouteTable', JSON.stringify(objectRoute))
+      await axios.post(http.url + 'explorer', objectRoute, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
         if (res.data.ret === 'success') {
-          this.data = res.data.obj
+          this.obj = res.data.obj.obj
+          this.total = res.data.obj.rows
         } else {
-          this.$toast.add({ severity: 'error', summary: 'Falha', detail: res.data.motivo, life: 3000 })
+          this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
         }
-        this.isLoading = false
+        this.loading = false
       }).catch(err => {
-        this.$toast.add({ severity: 'error', summary: 'Falha', detail: err, life: 3000 })
-        this.isLoading = false
+        this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })
       })
     },
     onPage (event) {
-      event.page += 1
-      this.explorer.pagina = event.page
-      this.getexplorer(this.explorer)
+      alert(event)
+      /* var objR = JSON.parse(sessionStorage.getItem('objRouteTable'))
+      objR.pagging = event.page + 1
+      this.getAll(objR) */
+    },
+    onSearch (key) {
+      var filter = key.split(':')
+      var fi = ''
+      var objR = JSON.parse(sessionStorage.getItem('objRouteTable'))
+      if (filter.length > 1) {
+        fi = ' and CAST(' + filter[0] + ' as varchar) like \'%' + filter[1] + '%\''
+        objR.filters = fi
+        this.getAll(objR)
+      } else {
+        objR.filters = ''
+        this.getAll(objR)
+      }
+    },
+    onEditing () {
+      if (this.selecionado.length < 1) {
+        this.$toast.add({ severity: 'info', summary: 'Tickets ', detail: 'Nenhum Registro Selecionado', life: 3000 })
+      } else {
+        return this.selecionado[0].id
+      }
+    },
+    onRefresh () {
+      this.getAll(JSON.parse(sessionStorage.getItem('objRouteTable')))
+    },
+    onDeleted () {
+      this.iddelete = this.selecionado[0].id
+      this.showDeleted = true
+    },
+    onConfirmationDeleted () {
+      this.showDeleted = false
+      axios.delete(http.url + 'explorerdeleted?id=' + parseInt(this.iddelete) + '&campo=' + this.classname).then(res => {
+        if (res.data.ret === 'success') {
+          this.$toast.add({ severity: 'success', summary: 'Tickets ', detail: 'Excluido com sucesso!!!', life: 3000 })
+          this.getAll(JSON.parse(sessionStorage.getItem('objRouteTable')))
+        }
+      }).catch(err => {
+        this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })
+      })
     }
-  },
-  directives: {
-    tooltip: Tooltip,
-    loading: Loading
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.p-datatable-sm{
-  height: 74vh;
-  font-size: 11px;
+.table{
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
 }
 </style>

@@ -1,92 +1,58 @@
 <template>
-<div>
   <div class="home">
-    <Sidebar :side="side"/>
+    <SideBar :menuitens="menuitens"/>
   </div>
-</div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Sidebar from '@/components/SideBar/NavBar.vue'
-
+import SideBar from '../components/SideBar/SideBar.vue'
 export default {
   name: 'Home',
   data () {
     return {
-      side: {
-        home: {
-          show: true,
-          route: '/dashboard'
+      menuitens: [
+        {
+          label: 'Dashboard',
+          icon: 'ad ad-chart',
+          route: 'dashboard',
         },
-        mensagens: {
-          show: false,
-          msg: []
+        {
+          label: 'Atendimentos',
+          icon: 'ad ad-sell',
+          route: 'Atendimento',
         },
-        alert: {
-          show: true,
-          msg: [
+        {
+          label: 'Cadastros',
+          icon: 'ad ad-person',
+          route: '',
+          sub: [
             {
-              id: 1,
-              title: 'Olá sou um alerta',
-              route: '',
-              body: 'Dia 15 de Abril'
+              label: 'Clientes',
+              icon: '',
+              subroute: ''
+            },
+            {
+              label: 'Fornecedores',
+              icon: '',
+              subroute: ''
             }
           ]
         },
-        config: {
-          show: true,
-          route: '/dashboard'
+        {
+          label: 'Relatórios',
+          icon: 'ad ad-report',
+          route: '',
         },
-        menu: [
-          {
-            nome: 'DashBoard',
-            icon: 'far fa-chart-bar',
-            route: '/dashboard',
-            type: 0,
-            show: false
-          },
-          {
-            nome: 'Atendimentos',
-            icon: 'far fa-calendar-alt',
-            route: '/atendimentos',
-            type: 0,
-            show: false
-          },
-          {
-            nome: 'Cadastros',
-            icon: 'far fa-address-card',
-            type: 1,
-            show: true,
-            sub: [
-              {
-                nome: 'Clientes',
-                icon: 'far fa-chart-bar',
-                route: '/clientes'
-              },
-              {
-                nome: 'Atendentes',
-                icon: 'far fa-chart-bar',
-                route: '',
-                show: true
-              },
-              {
-                nome: 'Status',
-                icon: 'far fa-chart-bar',
-                route: '/',
-                show: true
-              }
-            ]
-          }
-        ]
-      }
+        {
+          label: 'Configurações',
+          icon: 'ad ad-settings',
+          route: '',
+        }
+      ]
     }
   },
   components: {
-    Sidebar
-  },
-  mounted () {
-    console.log('Teste Debug')
+    SideBar
   }
 }
 </script>

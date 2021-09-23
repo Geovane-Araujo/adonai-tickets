@@ -1,12 +1,14 @@
 <template>
   <div>
-    Atendimentos
+    Aqui é o Dashboard
   </div>
 </template>
 
 <script>
 export default {
-
+  setup () {
+    return {}
+  }
 }
 </script>
 

@@ -1,34 +1,24 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import DataTable from './components//DataTable/DataTable.vue'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
-import VueTheMask from 'vue-the-mask'
-import '@fortawesome/fontawesome-free/js/all.js'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap/dist/js/bootstrap.js'
-import '@fortawesome/fontawesome-free/css/all.css'
-import '@/assets/scss/app.scss'
+import tbl from './components/datatable/DataTable.vue'
+
+import 'primevue/resources/themes/md-dark-deeppurple/theme.css'
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
-import 'primevue/resources/themes/fluent-light/theme.css'
-import './globalcomponents'
+import './assets/scss/app.scss'
+import './assets/scss/icons.scss'
 
-Vue.config.productionTip = false
-Vue.component('datatable', DataTable)
-Vue.use(PrimeVue, { ripple: true })
-Vue.use(ToastService)
-Vue.use(VueTheMask)
+const app = createApp(App)
 
-/* Vue.use(VueApexCharts)
-Vue.component('apexchart', VueApexCharts) */
-
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+app.use(PrimeVue, {ripple: true})
+app.use(ToastService)
+app.component('table-ticket', tbl)
+app.use(store)
+app.use(router)
+app.mount('#app')

@@ -47,6 +47,18 @@ export default {
           label: 'Configurações',
           icon: 'ad ad-settings',
           route: '',
+          sub: [
+            {
+              label: 'Empresa',
+              icon: '',
+              subroute: ''
+            },
+            {
+              label: 'Usuários',
+              icon: '',
+              subroute: 'Usuarios'
+            }
+          ]
         }
       ]
     }

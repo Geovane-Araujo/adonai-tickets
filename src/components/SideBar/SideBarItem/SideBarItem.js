@@ -31,7 +31,7 @@ export default {
             this.iOld = item
           }
         }
-        document.getElementById(item).style.backgroundColor = ' #0c9164'
+        document.getElementById(item).style.backgroundColor = ' #F48FB1'
       }
     }
   },

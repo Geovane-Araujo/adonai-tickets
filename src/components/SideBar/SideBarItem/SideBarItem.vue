@@ -50,7 +50,7 @@ $colorenfeite:aliceblue;
 }
 .btna:active:hover{
   .enfeite{
-    background-color:rgba($color: #0c9164, $alpha: 0.4);
+    background-color:rgba($color: #F48FB1, $alpha: 0.4);
   }
 }
 .group-item{

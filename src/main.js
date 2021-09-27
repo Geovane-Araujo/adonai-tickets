@@ -6,6 +6,7 @@ import store from './store'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
 import tbl from './components/datatable/DataTable.vue'
+import search from './components/datatable/DataTableSearch.vue'
 import circleavater from './components/CircleAvatar/CircleAvatar.vue'
 import VueParticles from 'vue-particles'
 
@@ -32,6 +33,7 @@ app.use(ToastService)
 app.use(VueParticles)
 app.component('table-ticket', tbl)
 app.component('circle-avatar', circleavater)
+app.component('datasearch-ticket', search)
 app.use(store)
 app.use(router)
 app.mount('#app')

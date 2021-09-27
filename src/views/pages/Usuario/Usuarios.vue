@@ -8,7 +8,7 @@
       <table-ticket classname="fases_crecimento" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
     </div>
     <div>
-      <Dialog :style="{width: '40vw'}" header="Cadastros De Usuarios" v-model:visible="showModal" :modal="true">
+      <Dialog :style="{width: '45vw'}" header="Cadastros De Usuarios" v-model:visible="showModal" :modal="true">
           <div class="row">
             <div class="col-sm-3">
               <div class="p-col-12 p-md-4">
@@ -41,6 +41,63 @@
                 </div>
               </div>
             </div>
+            <div class="col-sm-3">
+              <div class="p-fluid p-field">
+                <label >Telefone</label>
+                <InputText v-model="form.pessoa.telefone[0].fone" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="p-fluid p-field">
+                <label >Telefone Celular</label>
+                <InputText v-model="form.pessoa.telefone[1].fone" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="p-fluid p-field">
+                <label >Telefone Email</label>
+                <InputText v-model="form.pessoa.email[0].email" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="p-fluid p-field">
+                <label >Cep</label>
+                <InputText v-model="form.pessoa.endereco.cep" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-7">
+              <div class="p-fluid p-field">
+                <label >Endereço</label>
+                <InputText v-model="form.pessoa.endereco.endereco" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="p-fluid p-field">
+                <label >Numero</label>
+                <InputText v-model="form.pessoa.endereco.numero" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="p-fluid p-field">
+                <label >Bairro</label>
+                <InputText v-model="form.pessoa.endereco.bairro" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="p-fluid p-field">
+                <label >Complemento</label>
+                <InputText v-model="form.pessoa.endereco.complemento" type="text"/>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="p-fluid p-field">
+                <label >Cidade</label>
+                  <div class="p-inputgroup">
+                    <InputText  v-model="form.pessoa.endereco.cidade" type="text" />
+                    <Button @click="onDataSearch" icon="pi pi-search"/>
+                </div>
+              </div>
+            </div>
           </div>
         <template #footer>
           <Button label="Salvar" @click="onValidate"/>
@@ -48,104 +105,13 @@
       </template>
       </Dialog>
     </div>
+    <div class="datasearch">
+      <datasearch-ticket :onDestroy="onDestroy" ref="datasearch"/>
+    </div>
   </div>
 </template>
 
-<script>
-import Dialog from 'primevue/dialog'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import http from '../../../router/http'
-import axios from 'axios'
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
-import Calendar from 'primevue/calendar'
-export default {
-  data () {
-    return {
-      isLoading: false,
-      showModal: false,
-      dynamic: {
-        route: 'menu_fases',
-        pagging: 1,
-        filters: '',
-        orders: ' id desc'
-      },
-      imagem: '',
-      urlimage: http.urlimages,
-      urlupload: http.urlUpload,
-      fields: [
-        {
-          length: 5,
-          field: 'id',
-          header: 'ID'
-        },
-        {
-          length: 95,
-          field: 'descricao',
-          header: 'Descricao'
-        }
-      ],
-      form: {
-      }
-    }
-  },
-  components: {
-    Dialog,
-    InputText,
-    Button,
-    Loading,
-    Calendar
-  },
-  mounted () {
-    // this.onGetDynamic()
-  },
-  methods: {
-    onGetById (id) {
-      this.isLoading = true
-      axios.get(http.url + 'usuario?id=' + id).then(res => {
-        if (res.data.ret === 'success') {
-          this.form = res.data.obj
-        } else {
-          this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
-        }
-        this.showModal = true
-        this.isLoading = false
-      }).catch(err => {
-        this.isLoading = false
-        this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })
-      })
-    },
-    onSave (form) {
-      axios.post(http.url + 'fasescrecimento', form).then(res => {
-        if (res.data.ret === 'success') {
-          this.$toast.add({ severity: 'success', summary: 'Estufa+', detail: 'Salvo com sucesso!!!', life: 3000 })
-        } else {
-          this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
-        }
-        this.showModal = false
-        this.onGetDynamic()
-      }).catch(err => {
-        this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })
-      })
-    },
-    onValidate () {
-      if (this.form.descricao === '') {
-        this.$toast.add({ severity: 'warn', summary: 'Estufa+', detail: 'Descricao não pode ficar em branco', life: 3000 })
-      } else {
-        this.onSave(this.form)
-      }
-    },
-    onGetDynamic () {
-      this.isLoading = true
-      this.$refs.datagrid.getAll(this.dynamic)
-      // this.isLoading = false
-    },
-    onUpdate(e){
-      this.imagem = e
-    }
-  }
-}
+<script src="./Usuarios.js">
 </script>
 
 <style lang="scss" scoped>

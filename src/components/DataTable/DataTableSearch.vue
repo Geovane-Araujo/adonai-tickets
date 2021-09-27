@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Dialog header="Busca Itens" :visible="showDataSearch" :style="{width: '50vw'}" :modal="true">
+    <loading class="loading" :active="isLoading" :height="45" :width="128" background-color="#c9cdf0" color="#232b70" loader="spinner" :is-full-page="true"/>
+    <Dialog header="Busca Itens"  v-model:visible="showDataSearch" :style="{width: '50vw'}" :modal="true">
       <div class="p-fluid row">
         <div class="p-field col-sm-12">
           <label>Descricao</label>
@@ -37,12 +38,13 @@ import Button from 'primevue/button'
 import Paginator from 'primevue/paginator'
 import InputText from 'primevue/inputtext'
 import Dialog from 'primevue/dialog'
-
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 export default {
-  name: 'datasearch-estufa',
+  name: 'datasearch-ticket',
   data () {
     return {
-      loading: false,
+      isLoading: false,
       showDataSearch: false,
       obj: [],
       itens: [],
@@ -52,15 +54,13 @@ export default {
       selectedFilter: '',
       iddelete: 0,
       route: '',
-      objectRoute: ''
+      objectRoute: '',
+      columns: []
     }
   },
   props: {
     title: {
       type: String
-    },
-    columns: {
-      type: Array
     },
     onDestroy: Function
   },
@@ -70,16 +70,20 @@ export default {
     Column,
     Button,
     Dialog,
-    InputText
+    InputText,
+    Loading
   },
   methods: {
     async getAll (objectRoute, route, tp) {
+      this.isLoading = true
       sessionStorage.setItem('objDataSearchRoute', JSON.stringify(objectRoute))
       sessionStorage.setItem('route', route)
-      await axios.post(http.url + 'dynamic', objectRoute, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
+      await axios.post(http.url + 'explorer', objectRoute, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
         if (res.data.ret === 'success') {
-          this.obj = res.data.obj.obj
-          this.total = res.data.obj.rows
+          this.columns = Object.keys(res.data.obj[0])
+          console.log(this.columns)
+          this.obj = res.data.obj
+          this.total = res.data.totalRecords
           this.route = sessionStorage.getItem('route')
         } else {
           this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
@@ -87,7 +91,9 @@ export default {
         if (tp === 0) {
           this.showDataSearch = true
         }
+        this.isLoading = false
       }).catch(err => {
+        this.isLoading = false
         this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })
       })
     },
